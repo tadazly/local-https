@@ -1,0 +1,19 @@
+{
+  "name": "local-https",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "local-https": "scripts/server.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "serve-index": "^1.9.1"
+  }
+}

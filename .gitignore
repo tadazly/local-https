@@ -1,0 +1,7 @@
+.env
+.temp
+.svn
+.DS_Store
+package-lock.json
+node_modules
+ssl
