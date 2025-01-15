@@ -86,9 +86,20 @@ export async function start(port, serverPath) {
             if (req.url.endsWith('.br')) {
                 res.set('Content-Encoding', 'br');
                 if (req.url.includes('wasm.br')) {
-                    res.set('Content-Type', 'application/wasm'); // 根据文件类型调整
+                    res.set('Content-Type', 'application/wasm');
                 } else {
-                    res.set('Content-Type', 'application/octet-stream'); // 根据文件类型调整
+                    res.set('Content-Type', 'application/octet-stream');
+                }
+            } else if (req.url.endsWith('.gz')) {
+                res.set('Content-Encoding', 'gzip');
+                if (req.url.includes('wasm.gz')) {
+                    res.set('Content-Type', 'application/wasm');
+                } else if (req.url.includes('.js.gz')) {
+                    res.set('Content-Type', 'application/javascript');
+                } else if (req.url.includes('.css.gz')) {
+                    res.set('Content-Type', 'text/css');
+                } else {
+                    res.set('Content-Type', 'application/octet-stream');
                 }
             }
             next()
