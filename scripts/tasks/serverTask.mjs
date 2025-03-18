@@ -9,6 +9,7 @@ import fsAsync from 'fs/promises'
 import { execAsync } from '../utils/processUtil.mjs'
 import { checkExist } from '../utils/fsUtil.mjs'
 import { project_path } from '../environment.mjs'
+import open from 'open'
 
 /**
  * 创建开发用的SSL证书
@@ -119,6 +120,7 @@ export async function start(port, serverPath) {
             .createServer(sslOptions, app)
             .listen(port, () => {
                 console.info(`'${serverPath}' running on 'https://localhost:${port}'`)
+                open(`https://localhost:${port}`)
                 success()
             })
             .on('error', err => {
@@ -137,6 +139,7 @@ export async function start(port, serverPath) {
         app
             .listen(port, () => {
                 console.info(`'${serverPath}' running on 'http://localhost:${port}'`)
+                open(`https://localhost:${port}`)
                 success()
             })
             .on('error', err => {
