@@ -37,6 +37,8 @@
 
     需要本地有 `openssl` ，没有请自行安装。
 
+    - windows：下载并安装 [Win64 OpenSSL v3.4.1 Light](https://slproweb.com/products/Win32OpenSSL.html)
+
     终端执行 
 
     ```shell
