@@ -141,7 +141,7 @@ export async function start(port, serverPath) {
         app
             .listen(port, () => {
                 console.info(`'${serverPath}' running on 'http://localhost:${port}'`)
-                open(`https://localhost:${port}`)
+                open(`http://localhost:${port}`)
                 success()
             })
             .on('error', err => {
@@ -178,7 +178,7 @@ export async function startBackground(port, serverPath, tag) {
     } else {
         tag = 'local-https-' + tag;
     }
-    await execAsync(`node_modules/.bin/pm2 start scripts/server.mjs --name ${tag} -- start ${port} ${serverPath}`, project_path);
+    await pm2StartAsync(port, serverPath, tag);
 }
 
 /**
@@ -187,14 +187,35 @@ export async function startBackground(port, serverPath, tag) {
  */
 export async function stopBackground(tag) {
     if (!tag) {
-        const pm2ListOutput = await execAsync('node_modules/.bin/pm2 jlist', project_path, false);
-        const pm2Processes = JSON.parse(pm2ListOutput.split('\n\n')[1]);
-        const localHttpsProcesses = pm2Processes.filter(proc => proc.name.startsWith('local-https'));
+        const localHttpsProcesses = await pm2FindProcessesAsync('local-https');
         for (const proc of localHttpsProcesses) {
-            await execAsync(`node_modules/.bin/pm2 delete ${proc.name}`, project_path);
+            await pm2DeleteAsync(proc.name);
         }
     } else {
         tag = 'local-https-' + tag;
-        await execAsync(`node_modules/.bin/pm2 delete ${tag}`, project_path);
+        await pm2DeleteAsync(tag);
     }
+}
+
+async function pm2FindProcessesAsync(tagPrefix) {
+    const pm2ListOutput = await execAsync(`${Path.join(project_path, 'node_modules/.bin/pm2')} jlist`, project_path, false);
+    let localHttpsProcesses;
+    try {
+        const outputArr = pm2ListOutput.split('\n\n');
+        const pm2Processes = JSON.parse(outputArr[1] || outputArr[0]);
+        localHttpsProcesses = pm2Processes.filter(proc => proc.name.startsWith(tagPrefix));
+    }
+    catch (err) {
+        console.error('pm2 jlist 返回错误');
+        localHttpsProcesses = [];
+    }
+    return localHttpsProcesses;
+}
+
+function pm2StartAsync(port, serverPath, tag) {
+    return execAsync(`${Path.join(project_path, 'node_modules/.bin/pm2')} start "${Path.join(project_path, 'scripts/server.mjs')}" --name "${tag}" -- start ${port} "${serverPath}"`, project_path);;
+}
+
+function pm2DeleteAsync(tag) {
+    return execAsync(`${Path.join(project_path, 'node_modules/.bin/pm2')} delete "${tag}"`, project_path);
 }

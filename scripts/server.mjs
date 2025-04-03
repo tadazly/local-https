@@ -4,11 +4,16 @@
 import console from './utils/logUtil.mjs'
 import * as serverTask from './tasks/serverTask.mjs'
 
-function main() {
+async function main() {
+    console.enableLogTime(true);
     const [, , task] = process.argv
     if (serverTask[task]) {
         console.log(`执行任务：${task}`)
-        serverTask[task].apply(this, process.argv.slice(3))
+        try {
+            await serverTask[task].apply(this, process.argv.slice(3))
+        } catch (err) {
+            console.error(`任务 ${task} 执行失败：`, err)
+        }
     } else {
         console.error(`未知任务：${task}，请使用 start / last / createSSL`)
     }
