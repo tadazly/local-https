@@ -71,3 +71,33 @@
     ```
 
     只要执行过 1 次 `start` 之后，可以在任意位置执行 `last` 来启动上一次启动的项目。
+
+### 后台服务管理
+
+本工具使用 PM2 来管理后台服务，支持以下功能：
+
+- 启动后台服务
+
+    ```shell
+    local-https startBackground [port] [project-path] [tag]
+    ```
+
+    参数：
+    - port: 端口号
+    - project-path: web项目路径
+    - tag: 可选，服务标签，用于标识不同的服务实例
+
+- 停止后台服务
+
+    ```shell
+    local-https stopBackground [tag]
+    ```
+
+    参数：
+    - tag: 可选，服务标签，不传则停止所有由本工具启动的后台服务
+
+注意事项：
+1. 后台服务使用 PM2 进行管理，服务会自动重启
+2. 可以通过 `pm2 list` 查看所有运行的服务
+3. 服务日志可以通过 `pm2 logs` 查看
+4. 建议为不同的服务指定不同的 tag，方便管理

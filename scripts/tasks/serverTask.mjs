@@ -162,3 +162,37 @@ export async function last() {
     const { serverPath, port } = JSON.parse(await fsAsync.readFile(configPath, 'utf-8'))
     await start(port, serverPath)
 }
+
+
+/**
+ * 启动后台服务器
+ * @param {number} port 端口
+ * @param {string} serverPath 服务器根目录
+ * @param {string} [tag] 进程标签
+ */
+export async function startBackground(port, serverPath, tag) {
+    if (!tag) {
+        tag = 'local-https-' + Date.now();
+    } else {
+        tag = 'local-https-' + tag;
+    }
+    await execAsync(`node_modules/.bin/pm2 start scripts/server.mjs --name ${tag} -- start ${port} ${serverPath}`, project_path);
+}
+
+/**
+ * 停止后台服务器
+ * @param {string} [tag] 进程标签，不传就停止所有 local-https 进程
+ */
+export async function stopBackground(tag) {
+    if (!tag) {
+        const pm2ListOutput = await execAsync('node_modules/.bin/pm2 jlist', project_path, false);
+        const pm2Processes = JSON.parse(pm2ListOutput.split('\n\n')[1]);
+        const localHttpsProcesses = pm2Processes.filter(proc => proc.name.startsWith('local-https'));
+        for (const proc of localHttpsProcesses) {
+            await execAsync(`node_modules/.bin/pm2 delete ${proc.name}`, project_path);
+        }
+    } else {
+        tag = 'local-https-' + tag;
+        await execAsync(`node_modules/.bin/pm2 delete ${tag}`, project_path);
+    }
+}
