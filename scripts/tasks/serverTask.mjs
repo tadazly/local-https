@@ -103,6 +103,8 @@ export async function start(port, serverPath) {
                     res.set('Content-Type', 'application/octet-stream');
                 }
             }
+            // 为请求设置缓存过期时间
+            // res.set('Cache-Control', 'public, max-age=360');
             next()
         })
         if (!await checkExist(Path.join(serverPath, 'index.html'))) {
