@@ -1,6 +1,49 @@
-# local https
+# local-https
 
-在本地快速启动一个 HTTP 静态文件服务器，用于开发和测试。
+> 快速启动一个本地 HTTPS 静态文件服务器，用于开发、调试、装腔作势。
+
+**local-https** 是一个零配置、本地开发利器，支持 HTTP/HTTPS，内置一键证书生成，配合 PM2 管理后台服务，轻松应对前端开发、接口联调、演示测试等场景。无需复杂部署，让你像个高级工程师一样在本地跑个破页面。
+
+## 特性
+
+- **HTTPS支持**：一键生成本地自签证书，解决浏览器跨域&安全警告。
+- **零配置启动**：执行一个命令，项目即刻在线。
+- **PM2后台管理**：多服务标签，自动重启，永不掉线（除非你手动）。
+- **跨平台支持**：Windows / macOS / Linux，无痛体验。
+- **适合懒人**：写代码已经够累了，启动服务器这事就交给它吧。
+
+## 快速开始
+
+```bash
+npm install
+npm link
+local-https createSSL     # 如果你需要 HTTPS
+local-https start 3000 ./your-project
+```
+
+也可以使用后台服务方式启动：
+
+```bash
+local-https startBackground 3000 ./your-project awesome-tag
+```
+
+## 后天启动管理
+
+- 查看服务列表：pm2 list
+- 查看日志：pm2 logs
+- 停止服务：local-https stopBackground awesome-tag
+
+## 为啥要用这个？
+
+- 用 Python、PHP 临时起服务器？别土了。
+- 用 nginx 本地配 HTTPS？累不累？
+- 用 VSCode 插件起服务？那玩意能后台跑？
+
+现在，用 local-https，你只需要一个命令，告别繁琐配置，效率狂飙，甚至有点假装专业的错觉。
+
+---
+
+### 👇下面开始讲人话
 
 ## 依赖
 
