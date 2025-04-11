@@ -27,7 +27,7 @@ local-https start 3000 ./your-project
 local-https startBackground 3000 ./your-project awesome-tag
 ```
 
-## 后天启动管理
+## 后台服务管理
 
 - 查看服务列表：pm2 list
 - 查看日志：pm2 logs
