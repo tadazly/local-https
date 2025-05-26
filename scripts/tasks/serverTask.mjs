@@ -105,6 +105,8 @@ export async function start(port, serverPath) {
             }
             // 为请求设置缓存过期时间
             // res.set('Cache-Control', 'public, max-age=360');
+            res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
             next()
         })
         if (!await checkExist(Path.join(serverPath, 'index.html'))) {
